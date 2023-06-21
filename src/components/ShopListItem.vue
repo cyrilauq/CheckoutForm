@@ -6,18 +6,28 @@
             <p>{{ itemDescription }}</p>
             <p>{{ itemPrice }} €</p>
         </div>
+        <span class="closeBtn" @click="$emit('delete', itemId)">close</span>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
 
     const props = defineProps({
+        itemId: Number,
         filePath: String,
         itemTitle: String,
         itemPrice: Number,
         itemDescription: String
     })
+
+    const emit = defineEmits(['delete'])
+
+    function removeItem() {
+        console.log(props.itemId);
+        
+        emit('delete', props.itemId)
+    }
 </script>
 
 <style scoped>

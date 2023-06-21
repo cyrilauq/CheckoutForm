@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
 
     const cardNameError = ref("")
     const cardNumberError = ref("")
@@ -16,6 +16,21 @@
     const cardNumberRendering = ref("#### #### #### ####")
     const cardExpirationMonthRendering = ref("MM")
     const cardExpirationYearRendering = ref("YY")
+
+    watch(
+        cardName,
+        verifyCardName
+    )
+
+    watch(
+        cardNumber,
+        verifyCardNumber
+    )
+
+    watch(
+        cardCvcCode,
+        verifyCvcCode
+    )
 
     function verifyCardName() {
         cardNameError.value = cardName.value.length <= 0 ? "The name on the card cannot be empty" : ""
@@ -83,10 +98,10 @@
         </div>
         <form>
             <label for="name">Name on card</label>
-            <input type="text" id="name" name="name" v-model="cardName" @keyup="verifyCardName" />
+            <input type="text" id="name" name="name" v-model="cardName" />
             <span class="error" v-if="cardNameError.length > 0">{{ cardNameError }}</span>
             <label for="cardNumber">Card number</label>
-            <input type="text" id="cardNumber" name="cardNumber" v-model="cardNumber" @keyup="verifyCardNumber" />
+            <input type="text" id="cardNumber" name="cardNumber" v-model="cardNumber" />
             <span class="error" v-if="cardNumberError.length > 0">{{ cardNumberError }}</span>
             <div>
                 <fieldset>
@@ -99,7 +114,7 @@
                 </fieldset>
                 <fieldset>
                     <caption>CVC</caption>
-                    <input type="number" id="cvc" name="cvcCode" placeholder="CVC" v-model="cardCvcCode" @input="verifyCvcCode" />
+                    <input type="number" id="cvc" name="cvcCode" placeholder="CVC" v-model="cardCvcCode" />
                     <span class="error" v-if="cardCvcCodeError.length > 0">{{ cardCvcCodeError }}</span>
                 </fieldset>
             </div>
