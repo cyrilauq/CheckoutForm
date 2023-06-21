@@ -1,9 +1,11 @@
 <template>
-    <ShopListItem v-for="item in items" 
-        :filePath="item.filePath"
-        :itemTitle="item.itemTitle"
-        :itemDescription="item.itemDescription"
-        :itemPrice="item.itemPrice" />
+    <section>
+        <ShopListItem v-for="item in items" 
+            :filePath="item.filePath"
+            :itemTitle="item.itemTitle"
+            :itemDescription="item.itemDescription"
+            :itemPrice="item.itemPrice" />
+    </section>
 </template>
 
 <script setup lang="ts">

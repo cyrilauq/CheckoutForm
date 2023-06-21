@@ -4,6 +4,7 @@
     const cardNameError = ref("")
     const cardNumberError = ref("")
     const cardExpirationDateError = ref("")
+    const cardCvcCodeError = ref("")
 
     const cardName = ref("");
     const cardNumber = ref("");
@@ -26,6 +27,7 @@
     }
 
     function verifyCardNumber() {
+        cardNumber.value = cardNumber.value.substring(0, 16)
         var temp: string = cardNumber.value;
         cardNumberError.value = /^[^0-9]*$/.test(cardNumber.value) ? "The card number must only contains numbers" : cardNumber.value.length != 16 ? "The length of the card code must be of 16" : ""
         if(!/^[^0-9]*$/.test(cardNumber.value)) {
@@ -45,10 +47,13 @@
 
     function verifyCardExpirationDate() {
         const currentDate = new Date()
-        if(parseInt(cardExpirationYear.value) < currentDate.getFullYear() || (parseInt(cardExpirationMonth.value) < (currentDate.getMonth() + 1) && parseInt(cardExpirationYear.value) < currentDate.getFullYear())) {
+        cardExpirationYearRendering.value = "YY"
+        cardExpirationMonthRendering.value = "MM"
+        const currentYear = currentDate.getFullYear() % 100;
+        if(parseInt(cardExpirationMonth.value) < 1 || parseInt(cardExpirationMonth.value) > 12) {
+            cardExpirationDateError.value = "The given month isn't valid"
+        } else if(parseInt(cardExpirationYear.value) < currentYear || (parseInt(cardExpirationMonth.value) < (currentDate.getMonth() + 1) && parseInt(cardExpirationYear.value) < currentYear)) {
             cardExpirationDateError.value = "Error in the expiration date"
-            cardExpirationYearRendering.value = "YY"
-            cardExpirationMonthRendering.value = "MM"
         } else {
             cardExpirationDateError.value = ""
             cardExpirationYearRendering.value = cardExpirationYear.value
@@ -59,7 +64,7 @@
 </script>
 
 <template>
-    <div>
+    <div id="payementInformation">
         <div id="cardSample">
             <div id="cardLogo"></div>
             <div id="cardSampleNumber">
@@ -76,36 +81,40 @@
                 </div>
             </div>
         </div>
+        <form>
+            <label for="name">Name on card</label>
+            <input type="text" id="name" name="name" v-model="cardName" @keyup="verifyCardName" />
+            <span class="error" v-if="cardNameError.length > 0">{{ cardNameError }}</span>
+            <label for="cardNumber">Card number</label>
+            <input type="text" id="cardNumber" name="cardNumber" v-model="cardNumber" @keyup="verifyCardNumber" />
+            <span class="error" v-if="cardNumberError.length > 0">{{ cardNumberError }}</span>
+            <div>
+                <fieldset>
+                    <caption>Expiration date</caption>
+                    <div>
+                        <input type="number" min="1" max="12" id="month" name="expirationMonth" placeholder="Month" v-model="cardExpirationMonth" @keyup="verifyCardExpirationDate" />
+                        <input type="number" min="0" max="99" id="year" name="expirationYear" placeholder="Year" v-model="cardExpirationYear" @keyup="verifyCardExpirationDate" />
+                    </div>
+                    <span class="error" v-if="cardExpirationDateError.length > 0">{{ cardExpirationDateError }}</span>
+                </fieldset>
+                <fieldset>
+                    <caption>CVC</caption>
+                    <input type="number" id="cvc" name="cvcCode" placeholder="CVC" v-model="cardCvcCode" @input="verifyCvcCode" />
+                    <span class="error" v-if="cardCvcCodeError.length > 0">{{ cardCvcCodeError }}</span>
+                </fieldset>
+            </div>
+            <button>Confirm payement</button>
+        </form>
     </div>
-    <form>
-        <label for="name">Name on card</label>
-        <input type="text" id="name" name="name" v-model="cardName" @keyup="verifyCardName" />
-        <span class="error" v-if="cardNameError.length > 0">{{ cardNameError }}</span>
-        <label for="cardNumber">Card number</label>
-        <input type="text" id="cardNumber" name="cardNumber" v-model="cardNumber" @keyup="verifyCardNumber" />
-        <span class="error" v-if="cardNumberError.length > 0">{{ cardNumberError }}</span>
-        <div>
-            <fieldset>
-                <caption>Expiration date</caption>
-                <div>
-                    <input type="number" min="1" max="12" id="month" name="expirationMonth" placeholder="Month" v-model="cardExpirationMonth" @keyup="verifyCardExpirationDate" />
-                    <input type="text" id="year" name="expirationYear" placeholder="Year" v-model="cardExpirationYear" @keyup="verifyCardExpirationDate" />
-                </div>
-                <span class="error" v-if="cardExpirationDateError.length > 0">{{ cardExpirationDateError }}</span>
-            </fieldset>
-            <fieldset>
-                <caption>CVC</caption>
-                <input type="number" id="cvc" name="cvcCode" placeholder="CVC" v-model="cardCvcCode" @input="verifyCvcCode" />
-                <span class="error" v-if="cardExpirationDateError.length > 0">{{ cardExpirationDateError }}</span>
-            </fieldset>
-        </div>
-        <button>Confirm payement</button>
-    </form>
 </template>
 
 <style scoped>
+    #payementInformation {
+        min-width: 400px;
+    }
     form {
         width: 65%;
+        max-width: 500px;
         min-width: 250px;
         display: flex;
         flex-direction: column;

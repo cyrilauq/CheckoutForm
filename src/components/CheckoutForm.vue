@@ -4,12 +4,14 @@
 </script>
 
 <template>
-    <PayementInformation />
-    <ShopList />
+    <div id="checkOutForm">
+        <PayementInformation />
+        <ShopList />
+    </div>
 </template>
 
 <style scoped>
-    template {
+    #checkOutForm {
         display: flex;
         flex-direction: row;
     }
