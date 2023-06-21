@@ -13,8 +13,8 @@
 
     const cardNameRendering = ref("FULL NAME")
     const cardNumberRendering = ref("#### #### #### ####")
-    const cardExpirationMonthRendering = ref("")
-    const cardExpirationYearRendering = ref("")
+    const cardExpirationMonthRendering = ref("MM")
+    const cardExpirationYearRendering = ref("YY")
 
     function verifyCardName() {
         cardNameError.value = cardName.value.length <= 0 ? "The name on the card cannot be empty" : ""
@@ -47,6 +47,8 @@
         const currentDate = new Date()
         if(parseInt(cardExpirationYear.value) < currentDate.getFullYear() || (parseInt(cardExpirationMonth.value) < (currentDate.getMonth() + 1) && parseInt(cardExpirationYear.value) < currentDate.getFullYear())) {
             cardExpirationDateError.value = "Error in the expiration date"
+            cardExpirationYearRendering.value = "YY"
+            cardExpirationMonthRendering.value = "MM"
         } else {
             cardExpirationDateError.value = ""
             cardExpirationYearRendering.value = cardExpirationYear.value
@@ -70,7 +72,7 @@
                 </div>
                 <div id="cardSampleExpireSection">
                     <p class="cardTitle">Expires</p>
-                    <p>{{ cardExpirationMonth }}/{{ cardExpirationYear }}</p>
+                    <p>{{ cardExpirationMonthRendering }}/{{ cardExpirationYearRendering }}</p>
                 </div>
             </div>
         </div>
