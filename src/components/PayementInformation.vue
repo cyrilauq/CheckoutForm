@@ -57,7 +57,16 @@
     }
 
     function verifyCvcCode() {
-
+        const cvcCode = cardCvcCode.value + "";
+        if(cvcCode.length === 0) {
+            cardCvcCodeError.value = "The CVC code shouldn't be empty"
+        } else if(/^[^0-9]*$/.test(cvcCode)) {
+            cardCvcCodeError.value = "The CVC code must only contains numbers"
+        } else if(cvcCode.length != 3 && cvcCode.length != 4) {
+            cardCvcCodeError.value = "The CVC code lenght must be 3 or 4"
+        } else {
+            cardCvcCodeError.value = "";
+        }
     }
 
     function verifyCardExpirationDate() {
